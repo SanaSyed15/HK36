@@ -1,44 +1,44 @@
+// indexserver.js
 const express = require('express');
 const bodyParser = require('body-parser');
-const path = require('path');
+const { User, Profile } = require('./models');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const sequelize = require('./config/database');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-
-// Middleware to parse form data
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Serve static files (e.g., HTML, CSS, JS)
-app.use(express.static(path.join(__dirname, 'public')));
+const PORT = process.env.PORT || 3000;
 
-// Route to serve the signup page
-app.get('/signup', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'signup.html'));
-});
-
-// Route to handle signup form submission
-app.post('/signup', (req, res) => {
-    const { username, password } = req.body;
-
-    // Example validation (implement your own logic)
-    if (!username || !password) {
-        return res.status(400).send('All fields are required!');
+// User signup route
+app.post('/signup', async (req, res) => {
+    const { Username, Email, Password } = req.body;
+    try {
+        const hashedPassword = await bcrypt.hash(Password, 10);
+        const user = await User.create({ Username, Email, PasswordHash: hashedPassword });
+        res.status(201).json({ UserID: user.UserID });
+    } catch (error) {
+        res.status(500).json({ error: 'Error creating user' });
     }
-
-    // Simulate user registration success
-    console.log('New user registered: ${username}');
-
-    // Redirect to the profile creation page after successful signup
-    res.redirect('/profile');
 });
 
-// Route to serve the profile creation page
-app.get('/profile', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'profile.html'));
+// User profile creation route
+app.post('/profile', async (req, res) => {
+    const { UserID, FirstName, LastName, DateOfBirth, Gender, City, Country, Email, PhoneNumber, LinkedInProfile, EducationalQualification, Institution } = req.body;
+    try {
+        const profile = await Profile.create({ UserID, FirstName, LastName, DateOfBirth, Gender, City, Country, Email, PhoneNumber, LinkedInProfile, EducationalQualification, Institution });
+        res.status(201).json({ ProfileID: profile.ProfileID });
+    } catch (error) {
+        res.status(500).json({ error: 'Error creating profile' });
+    }
 });
 
-// Start the server
+// Synchronize models with SQLite database
+sequelize.sync({ force: true })
+    .then(() => console.log('Database synced'))
+    .catch(err => console.error('Error syncing database', err));
+
 app.listen(PORT, () => {
-    console.log('Server running on http://localhost:${PORT}');
+    console.log(`Server is running on port ${PORT}`);
 });

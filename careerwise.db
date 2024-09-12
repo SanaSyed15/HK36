@@ -1,0 +1,23 @@
+ TABLE profiles (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            userId INTEGER,
+            firstName TEXT,
+            lastName TEXT,
+            dob TEXT,
+            age INTEGER,
+            gender TEXT,
+            country TEXT,
+            city TEXT,
+            phone TEXT,
+            email TEXT,
+            linkedin TEXT,
+            website TEXT,
+            education TEXT,
+            institution TEXT,
+            FOREIGN KEY(userId) REFERENCES users(id)
+        )P++Ytablesqlite_sequencesqlite_sequenceCREATE TABLE sqlite_sequence(name,seq)�O�}tableusersusersCREATE TABLE users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            email TEXT NOT NULL,
+            username TEXT NOT NULL,
+            password TEXT NOT NULL
+        )

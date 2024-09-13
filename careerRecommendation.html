@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Recommendation</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button onclick="getRecommendation()">Get Career Recommendation</button>
+    </div>
+
+    <script>
+        const careerCategories = {
+            "Urban Planner": {
+                "skills": ["Spatial analysis", "Project management", "Communication"],
+                "interests": ["City development", "Public policy", "Architecture"]
+            },
+            "Event Coordinator": {
+                "skills": ["Organization", "Negotiation", "Creativity"],
+                "interests": ["Event planning", "Social interaction", "Problem-solving"]
+            },
+            // Add other career categories here...
+             "Urban Planner": {
+        "skills": ["Spatial analysis", "Project management", "Communication"],
+        "interests": ["City development", "Public policy", "Architecture"]
+    },
+    "Event Coordinator": {
+        "skills": ["Organization", "Negotiation", "Creativity"],
+        "interests": ["Event planning", "Social interaction", "Problem-solving"]
+    },
+    "Marine Biologist": {
+        "skills": ["Research", "Fieldwork", "Data analysis"],
+        "interests": ["Marine life", "Environmental conservation", "Science"]
+    },
+    "Public Relations Specialist": {
+        "skills": ["Communication", "Media relations", "Crisis management"],
+        "interests": ["Media", "Public image", "Strategic planning"]
+    },
+    "Historical Preservationist": {
+        "skills": ["Research", "Documentation", "Restoration techniques"],
+        "interests": ["History", "Cultural heritage", "Museum studies"]
+    },
+    "Food Critic": {
+        "skills": ["Writing", "Sensory evaluation", "Critical thinking"],
+        "interests": ["Gastronomy", "Food culture", "Writing"]
+    },
+    "Environmental Scientist": {
+        "skills": ["Data collection", "Analysis", "Field research"],
+        "interests": ["Environmental issues", "Sustainability", "Science"]
+    },
+    "Interior Designer": {
+        "skills": ["Design", "Space planning", "Client interaction"],
+        "interests": ["Aesthetics", "Architecture", "Home decor"]
+    },
+    "Art Curator": {
+        "skills": ["Art knowledge", "Exhibition design", "Cataloging"],
+        "interests": ["Art", "Museum management", "Curation"]
+    },
+    "Human Resources Specialist": {
+        "skills": ["Recruitment", "Conflict resolution", "Employee relations"],
+        "interests": ["People management", "Organizational behavior", "HR policies"]
+    },
+    "Fitness Trainer": {
+        "skills": ["Exercise science", "Motivation", "Personal training"],
+        "interests": ["Fitness", "Health", "Well-being"]
+    },
+    "Film Director": {
+        "skills": ["Directing", "Storytelling", "Production management"],
+        "interests": ["Film", "Storytelling", "Creative vision"]
+    },
+    "Travel Writer": {
+        "skills": ["Writing", "Photography", "Cultural knowledge"],
+        "interests": ["Travel", "Writing", "Cultural exploration"]
+    },
+    "Architectural Historian": {
+        "skills": ["Research", "Historical analysis", "Documentation"],
+        "interests": ["Architecture", "History", "Preservation"]
+    },
+    "Social Worker": {
+        "skills": ["Counseling", "Community outreach", "Crisis intervention"],
+        "interests": ["Social issues", "Helping others", "Community service"]
+    },
+    "Technical Writer": {
+        "skills": ["Writing", "Technical understanding", "Documentation"],
+        "interests": ["Technology", "Writing", "Information dissemination"]
+    },
+    "Public Health Analyst": {
+        "skills": ["Data analysis", "Public health knowledge", "Research"],
+        "interests": ["Health statistics", "Policy development", "Public health"]
+    },
+    "Product Designer": {
+        "skills": ["Design", "Prototyping", "User experience"],
+        "interests": ["Innovation", "User-centered design", "Product development"]
+    },
+    "Forensic Scientist": {
+        "skills": ["Scientific analysis", "Attention to detail", "Investigation"],
+        "interests": ["Criminal justice", "Science", "Forensics"]
+    },
+    "Wildlife Photographer": {
+        "skills": ["Photography", "Fieldwork", "Animal behavior understanding"],
+        "interests": ["Wildlife", "Photography", "Conservation"]
+    }
+        };
+
+        function getRecommendation() {
+            const userResponses = JSON.parse(localStorage.getItem('assessmentResults'));
+            const scores = calculateMatchScores(userResponses, careerCategories);
+            const bestMatch = getBestMatch(scores);
+
+            alert(`Based on your responses, a career in ${bestMatch} may be a great fit for you!`);
+        }
+
+        function calculateMatchScores(userResponses, careerCategories) {
+            const scores = {};
+
+            for (const category in careerCategories) {
+                scores[category] = 0;
+            }
+
+            for (const category in careerCategories) {
+                const career = careerCategories[category];
+
+                career.skills.forEach(skill => {
+                    if (userResponses.skills.includes(skill)) {
+                        scores[category] += 1;
+                    }
+                });
+
+                career.interests.forEach(interest => {
+                    if (userResponses.interests.includes(interest)) {
+                        scores[category] += 1;
+                    }
+                });
+            }
+
+            return scores;
+        }
+
+        function getBestMatch(scores) {
+            let bestMatch = '';
+            let highestScore = -1;
+
+            for (const category in scores) {
+                if (scores[category] > highestScore) {
+                    highestScore = scores[category];
+                    bestMatch = category;
+                }
+            }
+
+            return bestMatch;
+        }
+    </script>
+</body>
+</html>
